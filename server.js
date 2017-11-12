@@ -1,4 +1,6 @@
-const http = require('http')
+'use strict';
+
+const http = require('http');
 
 const hostname = 'localhost';
 const port = 8080;

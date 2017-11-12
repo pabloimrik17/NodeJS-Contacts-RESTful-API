@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/pabloimrik17/NodeJS-Contacts-RESTful-API/issues"
   },
-  "homepage": "https://github.com/pabloimrik17/NodeJS-Contacts-RESTful-API#readme"
+  "homepage": "https://github.com/pabloimrik17/NodeJS-Contacts-RESTful-API#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2"
+  }
 }

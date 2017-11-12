@@ -1,19 +1,50 @@
-'use strict';
 
-const http = require('http');
 
-const hostname = 'localhost';
-const port = 8080;
+const bodyParser = require('body-parser');
+// Consume the API from different origin
+const cors = require('cors'); 
+const console = require('console');
 
-const server = http.createServer((request, response) => {
+const contacts = require('./data');
 
-    response.statusCode = 200;
-    response.setHeader('Content-Type', 'application/json');
-    response.end('<h1>Hello World </h1>');
+const express = require('express');
+const app = express();
+
+app.use(bodyParser.urlencoded({'extended': true}));
+app.use(cors());
+
+app.get('/api/contacts', (req, res) => {
+
+    if (!contacts) {
+
+        res.status(404).json({'message': 'No contacts found'});
+
+    }
+
+    res.json(contacts);
 
 });
 
-server.listen(port, hostname, () => {
+app.get('/api/contacts/:id', (req, res) => {
+
+    const reqId = req.params.id;
+
+    const resContact = contacts.filter((contact) => contact.id == reqId);
+    
+    if (!resContact) {
+
+        res.status(404).json({'message': 'No contacts found'});
+
+    }
+
+    res.json(resContact);
+
+});
+
+const hostname = 'localhost';
+const port = 3001;
+
+app.listen(port, hostname, () => {
 
     console.log(`Server running at http://${hostname}:${port}`)
 

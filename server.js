@@ -41,6 +41,62 @@ app.get('/api/contacts/:id', (req, res) => {
 
 });
 
+app.post('/api/contacts', (req, res) => {
+
+    const contact = {
+        'email': req.body.email,
+        'first_name': req.body.first_name,
+        'id': contacts.length + 1,
+        'last_name': req.body.last_name,
+        'website': req.body.website
+    }
+
+    contacts.push(contact);
+
+    res.json(contact);
+
+});
+
+app.put('/api/contacts/:id', (req, res) => {
+
+    const reqId = req.params.id;
+    const contact = contacts.filter((contact) => contact.id == reqId)[0];
+
+    const index = contacts.indexOf(contact);
+
+    // OBTENEMOS TODOS LOS ELEMENTOS DEL BODY
+    const keys = Object.keys(req.body); 
+
+    keys.forEach((key) => {
+
+        if (contact[key]) {
+
+            contact[key] = req.body[key];
+
+        }
+
+    });
+
+    contacts[index] = contact;
+
+    res.json(contacts[index]);
+    
+});
+
+app.delete('/api/contacts/:id', (req, res) => {
+    
+    const reqId = req.params.id;
+
+    const contact = contacts.filter((contact) => contact.id == reqId)[0];
+    
+    const index = contacts.indexOf(contact);
+
+    contacts.splice(index, 1);
+
+    res.json({'message': `UserId: ${reqId} deleted`});
+
+});
+
 const hostname = 'localhost';
 const port = 3001;
 

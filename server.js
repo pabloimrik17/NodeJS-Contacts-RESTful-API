@@ -9,9 +9,6 @@ const console = require('console');
 const mongoose = require('mongoose');
 const express = require('express');
 
-// DATA
-const contacts = require('./data');
-
 const app = express();
 
 app.use(bodyParser.urlencoded({'extended': true}));
@@ -22,14 +19,19 @@ const contactRoutes = require('./api/contacts/routes/contacts.routes');
 
 app.use('/api/contacts', contactRoutes);
 
-const hostname = 'localhost';
-const port = 3001;
+const hostname = process.env.SERVER_HOSTNAME;
+const port = process.env.SERVER_PORT;
 
-app.listen(port, hostname, () => {
+// DB CONNECTION
+mongoose.connect(process.env.MONGO_DB_URL, { useMongoClient: true });
+mongoose.Promise = global.Promise;
 
-    mongoose.connect(process.env.MONGO_DB_URL, { useMongoClient: true });
-    mongoose.Promise = global.Promise;
-
-    console.log(`Server running at http://${hostname}:${port}`)
-
-})
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log("DB connected");
+    
+    app.listen(port, hostname, () => {
+        console.log(`Server running at http://${hostname}:${port}`)
+    });
+});
